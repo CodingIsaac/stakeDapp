@@ -42,13 +42,13 @@ contract Staking {
 
 // This is the staking function - this is triggered once participants desire to stake and unstake their tokens
 
-    function stake() external payable{
+    function stake(uint _days, uint _amount) external payable{
         StakeInfo storage sData = stakes[msg.sender];
-        require(sData.stakedAmount > 0, "You can't stake Zero Tokens");
-        require (sData.noOfDays > 14, "Staking period can't be lower than fourteen days");
+        require(_amount > 0, "You can't stake Zero Tokens");
+        require (_days > 14, "Staking period can't be lower than fourteen days");
         sData.status = stakingStatus.OPENED;
-        sData.stakedAmount += msg.value;
-        sData.noOfDays = block.timestamp + (sData.noOfDays * 14 days);
+        sData.stakedAmount += _amount;
+        sData.noOfDays = block.timestamp + (_days * 14 days);
         sData.yearLater = block.timestamp + 365 days;
         
             

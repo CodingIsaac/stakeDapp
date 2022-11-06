@@ -42,13 +42,13 @@ contract Staking {
 
 // This is the staking function - this is triggered once participants desire to stake and unstake their tokens
 
-    function stake(uint _days, uint _amount) external payable{
+    function stake(uint _days) external payable{
         StakeInfo storage sData = stakes[msg.sender];
-        require(_amount > 0, "You can't stake Zero Tokens");
-        require (_days > 14, "Staking period can't be lower than fourteen days");
+        require(msg.value > 0, "You can't stake Zero Tokens");
+        require (_days > 1, "You can't stake lower than a day");
         sData.status = stakingStatus.OPENED;
-        sData.stakedAmount += _amount;
-        sData.noOfDays = block.timestamp + (_days * 14 days);
+        sData.stakedAmount += msg.value;
+        sData.noOfDays = block.timestamp + (_days * 1 days);
         sData.yearLater = block.timestamp + 365 days;
         
             
@@ -58,17 +58,10 @@ contract Staking {
     // Function to withdraw stake
     function withdrawStake() external {
         StakeInfo memory userStake = stakes[msg.sender];
-        /**
-        require that the time has not elapsed
-        require that a stranger doesn't come for our tokens
-        rewuire that the staker has the minted token
         
-        */
         require(block.timestamp > userStake.noOfDays, "Staking period not elapsed");
         require(userStake.stakedAmount > 0, "Zero Stake Balance");
         
-
-        // calculate yield
 
         uint calculatedYield = calculateYield(userStake.noOfDays, userStake.stakedAmount, userStake.yearLater);
         // determine the transferable token

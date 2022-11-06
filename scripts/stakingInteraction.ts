@@ -1,13 +1,14 @@
 import { ethereum } from "@ceramicnetwork/blockchain-utils-linking";
+import { parseEther } from "ethers/lib/utils";
 import { ethers } from "hardhat";
 
-const SMART_CONTRACT = "0xf18130Ba24B61386C3A2b82623ba7862472Ae879"
+const SMART_CONTRACT = "0x8134278FbA2c5F19C7D8f8965cBA04Cf36b04974"
 
 async function main() {
     const startStake = await ethers.getContractFactory("Staking");
     const doStake = startStake.attach(SMART_CONTRACT);
 
-    const stakeToken = await doStake.stake(2)
+    const stakeToken = await doStake.stake(1657084241, parseEther("0.1"))
     const stakeReceipt = await stakeToken.wait();
     console.log("Receipt", stakeReceipt);
 
